@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Prescription - {{ patient.first_name }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">New Prescription</h1>
+    
+    <form method="POST" class="bg-white rounded-xl shadow-lg p-8">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+                <label class="block font-semibold mb-2">Patient</label>
+                <p class="text-xl">{{ patient.first_name }} {{ patient.last_name }} (ID: {{ patient.id }})</p>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Date</label>
+                <p class="text-xl">{{ "now"|datetime }}</p>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <label class="block font-semibold mb-2">Medication</label>
+                <input type="text" name="medication" required class="w-full p-4 border rounded-lg text-lg">
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Dosage & Instructions</label>
+                <textarea name="instructions" rows="4" required class="w-full p-4 border rounded-lg text-lg" 
+                          placeholder="e.g., Take 1 tablet twice daily after meals for 5 days"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-8 flex gap-4">
+            <button type="submit" class="btn btn-success text-xl px-8 py-4">Save & Print Prescription</button>
+            <a href="{{ url_for('doctor.view_patient', patient_id=patient.id) }}" class="btn btn-secondary text-xl px-8 py-4">Back</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

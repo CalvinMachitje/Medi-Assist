@@ -6,3 +6,6 @@ __pycache__/
 instance/
 uploads/*
 .DS_Store
+
+
+show_schema.py

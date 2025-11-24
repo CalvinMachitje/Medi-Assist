@@ -1,55 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Medi-Assist{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    {% block head %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Medi-Assist™ — Dashboard{% endblock %}</title>
+
+  <!-- Icons + Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/baseSidebar.css') }}?v=2">
+  {% if session.role == 'receptionist' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reception.css') }}?v=2">
+  {% elif session.role == 'doctor' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/doctor.css') }}?v=1">
+  {% elif session.role == 'nurse' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nurse.css') }}?v=1">
+  {% elif session.role == 'admin' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=1">
+  {% elif session.role == 'manager' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manager.css') }}?v=2">
+  {% endif %}
+  {% block styles %}{% endblock %}
+
+  <!-- CSRF Token for JS -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  <!-- === PERSISTENT THEME FROM localStorage === -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.dataset.theme = savedTheme;
+    });
+  </script>
+
+  <!-- Update current-time CSS variable -->
+  <style>
+    :root {
+      --current-time: "02:35 PM SAST, October 22, 2025";
+    }
+    @keyframes update-time {
+      0% { --current-time: "00:00 AM SAST, January 1, 1970"; }
+      100% { --current-time: "00:00 AM SAST, January 1, 1970"; }
+    }
+    :root { animation: update-time 1s infinite; }
+  </style>
+
+  <!-- Dynamic time injector -->
+  <script>
+    (function () {
+      const now = new Date();
+      const options = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Africa/Johannesburg' };
+      const timeStr = now.toLocaleString('en-ZA', options).replace(',', '') + ' SAST, ' +
+                      now.toLocaleDateString('en-ZA', { year:'numeric', month:'long', day:'numeric' });
+      document.documentElement.style.setProperty('--current-time', `"${timeStr}"`);
+    })();
+  </script>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-teal fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('default_page') }}">Medi-Assist</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard' if current_user.role == 'admin' else current_user.role + '.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.announcements') }}">Announcements</a></li>
-                    {% endif %}
-                </ul>
-                <ul class="navbar-nav">
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item"><span class="nav-link">Welcome, {{ current_user.first_name }}</span></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
-                    {% endif %}
-                </ul>
-            </div>
+<body class="dashboard-page" data-role="{{ session.role }}" data-user-id="{{ session.user_id or '' }}">
+  <i class="fas fa-bars menu-icon" id="menu-toggle-btn"></i>
+
+  <!-- Sidebar -->
+  <aside class="sidebar {% if session.role == 'receptionist' %}active{% endif %}" id="sidebar" role="navigation" aria-label="Main Navigation">
+    <div class="logo">ClinicCare</div>
+    <nav>
+      {% if session.username %}
+        <div class="user-info">
+          <img src="{{ url_for('static', filename=session.profile_image) }}" alt="User Avatar" id="sidebarAvatar">
+          <span>{{ session.username }} ({{ session.role | capitalize }})</span>
         </div>
+
+        <!-- Role-specific menu -->
+        {% if session.role == 'receptionist' %}
+          <ul>
+            <li><a href="{{ url_for('reception_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('manage_appointments') }}" class="sidebar-btn">Manage Appointments</a></li>
+            <li><a href="{{ url_for('check_in_desk') }}" class="sidebar-btn">Check-In Desk</a></li>
+            <li><a href="{{ url_for('helped_patients_report') }}" class="sidebar-btn">Patient Report</a></li>
+            <li><a href="{{ url_for('search_patient') }}" class="sidebar-btn">Search Patients</a></li>
+            <li><a href="{{ url_for('reception_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
+            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
+            <li class="theme-toggle-wrapper">
+              <label class="switch ms-3">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        {% elif session.role == 'doctor' %}
+          <ul>
+            <li><a href="{{ url_for('doctor_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('doctor_report') }}" class="sidebar-btn">Report</a></li>
+            <li><a href="{{ url_for('doctor_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
+            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
+            <li class="theme-toggle-wrapper">
+              <label class="switch ms-3">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        {% elif session.role == 'nurse' %}
+          <ul>
+            <li><a href="{{ url_for('nurse_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('nurse_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
+            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
+            <li class="theme-toggle-wrapper">
+              <label class="switch ms-3">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        {% elif session.role == 'manager' %}
+          <ul>
+            <li><a href="{{ url_for('manager_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('inventory') }}" class="sidebar-btn">Inventory</a></li>
+            <li><a href="{{ url_for('executive_report') }}" class="sidebar-btn">Executive Report</a></li>
+            <li><a href="{{ url_for('manage_staff') }}" class="sidebar-btn">Manage Staff</a></li>
+            <li><a href="{{ url_for('staff_schedule') }}" class="sidebar-btn">Staff Schedule</a></li>
+            <li><a href="{{ url_for('manager_announcements') }}" class="sidebar-btn">Announcements</a></li>
+            <li><a href="{{ url_for('download_guide') }}" class="sidebar-btn">Download Guide</a></li>
+            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
+            <li class="theme-toggle-wrapper">
+              <label class="switch ms-3">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        {% elif session.role == 'admin' %}
+          <ul>
+            <li><a href="{{ url_for('admin_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('manage_users') }}" class="sidebar-btn">Manage Users</a></li>
+            <li><a href="{{ url_for('system_settings') }}" class="sidebar-btn">System Settings</a></li>
+            <li><a href="{{ url_for('doctor_report') }}" class="sidebar-btn">Report</a></li>
+            <li><a href="{{ url_for('admin_announcements') }}" class="sidebar-btn">Manage Announcements</a></li>
+            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
+            <li class="theme-toggle-wrapper">
+              <label class="switch ms-3">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        {% endif %}
+
+      {% else %}
+        <ul><li><a href="{{ url_for('login_page') }}">Login</a></li></ul>
+      {% endif %}
     </nav>
+  </aside>
 
-    <div class="container mt-5 pt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </div>
+  <!-- Main Content -->
+  <main class="dashboard" id="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+              <button class="close" onclick="this.parentElement.remove()">X</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    {% block scripts %}{% endblock %}
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('darkModeToggle');
+      if (!toggle) return;
+
+      // Restore from localStorage
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.dataset.theme = savedTheme;
+      toggle.checked = savedTheme === 'dark';
+
+      toggle.addEventListener('change', () => {
+        const newTheme = toggle.checked ? 'dark' : 'light';
+        document.documentElement.dataset.theme = newTheme;
+        localStorage.setItem('theme', newTheme);
+
+        // Sync with backend if logged in
+        const userId = document.body.dataset.userId;
+        if (userId) {
+          const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+          fetch('/change_theme', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': csrfToken
+            },
+            body: 'theme=' + encodeURIComponent(newTheme)
+          }).catch(() => {});
+        }
+      });
+    });
+
+    // Sidebar logic
+    function initSidebar() {
+      const toggleBtn = document.getElementById('menu-toggle-btn');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main-content');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (!toggleBtn || !sidebar || !mainContent || !overlay) return;
+
+      let isOpen = sidebar.classList.contains('active');
+      toggleBtn.setAttribute('aria-expanded', isOpen);
+
+      function toggleSidebar() {
+        isOpen = !isOpen;
+        sidebar.classList.toggle('active', isOpen);
+        mainContent.classList.toggle('active', isOpen);
+        overlay.classList.toggle('active', isOpen);
+        toggleBtn.setAttribute('aria-expanded', isOpen);
+      }
+
+      toggleBtn.addEventListener('click', toggleSidebar);
+      overlay.addEventListener('click', toggleSidebar);
+      document.addEventListener('keydown', e => e.key === 'Escape' && isOpen && toggleSidebar());
+
+      if ('{{ session.get("role") }}' === 'receptionist') {
+        setTimeout(toggleSidebar, 100);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSidebar);
+    } else {
+      initSidebar();
+    }
+  </script>
+
+  <script src="{{ url_for('static', filename='js/defaultPage.js') }}?v=1"></script>
+  {% if session.role == 'receptionist' %}
+    <script src="{{ url_for('static', filename='js/reception.js') }}?v=2"></script>
+  {% elif session.role == 'doctor' %}
+    <script src="{{ url_for('static', filename='js/doctorDashboard.js') }}?v=1"></script>
+  {% elif session.role == 'nurse' %}
+    <script src="{{ url_for('static', filename='js/nurseDashboard.js') }}?v=1"></script>
+  {% elif session.role == 'admin' %}
+    <script src="{{ url_for('static', filename='js/admin.js') }}?v=1"></script>
+  {% elif session.role == 'manager' %}
+    <script src="{{ url_for('static', filename='js/manager.js') }}?v=2"></script>
+  {% endif %}
+  {% block scripts %}{% endblock %}
 </body>
 </html>

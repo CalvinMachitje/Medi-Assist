@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Emergency Center - Medi-Assist™{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-10">
+        <h1 class="text-5xl font-bold text-red-600 mb-4">EMERGENCY CENTER</h1>
+        <p class="text-xl text-gray-700">Active Emergency Requests • Respond Immediately</p>
+    </div>
+
+    {% if emergency_requests %}
+    <div class="grid gap-8">
+        {% for req in emergency_requests %}
+        <div class="bg-red-50 border-4 border-red-600 rounded-xl p-8 shadow-2xl transform hover:scale-105 transition">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-red-800">EMERGENCY #{{ req.id }}</h2>
+                    <p class="text-xl mt-2">Patient: <strong>{{ req.patient_name }}</strong> (ID: {{ req.patient_id }})</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-5xl font-bold text-red-700">{{ req.priority|upper }}</div>
+                    <div class="text-sm text-gray-600">Requested: {{ req.requested_at.strftime('%H:%M') }}</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 mb-6">
+                <p class="text-lg"><strong>Symptoms:</strong> {{ req.symptoms }}</p>
+                <p class="text-lg mt-3"><strong>Location:</strong> {{ req.location }}</p>
+            </div>
+
+            <div class="flex gap-4">
+                <a href="{{ url_for('doctor.view_patient', patient_id=req.patient_id) }}" 
+                   class="btn btn-danger text-xl px-8 py-4">Respond Now</a>
+                <button onclick="markResponded((( req.id )))" 
+                        class="btn btn-outline-danger text-xl px-8 py-4">Mark as Responded</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20">
+        <i class="fas fa-heartbeat text-9xl text-green-500 mb-8"></i>
+        <h2 class="text-4xl font-bold text-green-600">All Clear!</h2>
+        <p class="text-2xl text-gray-600 mt-4">No active emergency requests.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function markResponded(id) {
+    fetch('/doctor/mark_emergency_responded', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emergency_id: id })
+    }).then(() => location.reload());
+}
+</script>
+{% endblock %}

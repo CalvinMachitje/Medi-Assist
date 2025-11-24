@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prescription</title>
+    <style>body{font-family:Arial;margin:40px;} .header{text-align:center;margin-bottom:40px;}</style>
+</head>
+<body onload="window.print()">
+<div class="header">
+    <h1>Medi-Assist™ Clinic</h1>
+    <p>Prescription • Dr. {{ current_user.first_name }} {{ current_user.last_name }}</p>
+</div>
+<p><strong>Patient:</strong> {{ presc.patient.first_name }} {{ presc.patient.last_name }}</p>
+<p><strong>Date:</strong> {{ presc.prescribed_date.strftime('%d %B %Y') }}</p>
+<hr>
+<h2>{{ presc.medication_name }}</h2>
+<p><strong>Dosage:</strong> {{ presc.dosage }}</p>
+</body>
+</html>

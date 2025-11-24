@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Admin Report - Medi-Assist™{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=1">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold text-center mb-8 text-primary">Admin Report Summary</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Total Users</h3>
+            <p class="text-3xl font-bold text-primary">{{ total_users }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Total Doctors</h3>
+            <p class="text-3xl font-bold text-primary">{{ total_doctors }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Total Nurses</h3>
+            <p class="text-3xl font-bold text-primary">{{ total_nurses }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Total Receptionists</h3>
+            <p class="text-3xl font-bold text-primary">{{ total_receptionists }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Total Patients</h3>
+            <p class="text-3xl font-bold text-primary">{{ total_patients }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Monthly Appointments</h3>
+            <p class="text-3xl font-bold text-primary">{{ monthly_appointments_total }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Pending</h3>
+            <p class="text-3xl font-bold text-orange-600">{{ pending_appointments }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Completed</h3>
+            <p class="text-3xl font-bold text-green-600">{{ completed_appointments }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Missed</h3>
+            <p class="text-3xl font-bold text-red-600">{{ missed_appointments }}</p>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold mb-2">Monthly Revenue</h3>
+            <p class="text-3xl font-bold text-primary">${{ monthly_revenue }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div class="chart-box bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold mb-4 text-center">Staff Distribution</h3>
+            <canvas id="staffPieChart"></canvas>
+        </div>
+        <div class="chart-box bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold mb-4 text-center">Appointment Status</h3>
+            <canvas id="appointmentBarChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-box full-width-chart bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-semibold mb-4 text-center">Monthly Appointments Trend (Last 6 Months)</h3>
+        <canvas id="monthlyLineChart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin_report.js') }}?v=1"></script>
+<script type="application/json" id="staffPieDataJson">{{ staff_pie_data_json|tojson }}</script>
+<script type="application/json" id="appointmentBarDataJson">{{ appointment_bar_data_json|tojson }}</script>
+<script type="application/json" id="monthlyAppointmentsDataJson">{{ monthly_appointments_data_json|tojson }}</script>
+<script>
+  window.staffPieData = JSON.parse(document.getElementById('staffPieDataJson').textContent);
+  window.appointmentBarData = JSON.parse(document.getElementById('appointmentBarDataJson').textContent);
+  window.monthlyAppointmentsData = JSON.parse(document.getElementById('monthlyAppointmentsDataJson').textContent);
+</script>
+{% endblock %}

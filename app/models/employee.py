@@ -1,7 +1,7 @@
-from app.extensions import db
+from app.extensions import db, bcrypt
+from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
 
 class Employee(UserMixin, db.Model):
     __tablename__ = 'employees'
@@ -22,11 +22,11 @@ class Employee(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     active = db.Column(db.Boolean, default=True, nullable=False)
     
-    # Relationships from original
+    # Relationships
     patients = db.relationship('Patient', backref='employee', lazy=True)
-    appointments = db.relationship('Appointment', foreign_keys='Appointment.helper_id',
-                                   primaryjoin="Employee.staff_number == Appointment.helper_id",
-                                   backref='assigned_helper', lazy=True)
+    appointments = db.relationship('Appointment', foreign_keys='Appointment.helper_id', primaryjoin="Employee.staff_number == Appointment.helper_id", backref='assigned_helper', lazy=True)
+    prescriptions = db.relationship('Prescription', backref='nurse', lazy=True)
+    helped_patients = db.relationship('HelpedPatient', backref='nurse', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -1,25 +1,78 @@
-{% extends 'base.html' %}
-{% block title %}Admin Dashboard - Medi-Assist{% endblock %}
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - Medi-Assist™{% endblock %}
 {% block content %}
-<h1>Admin Dashboard</h1>
-<div class="row">
-    <div class="col-md-6">
-        <h3>Recent Announcements</h3>
-        <ul>
-            {% for ann in announcements %}
-                <li>{{ ann.title }} - {{ ann.timestamp }}</li>
-            {% endfor %}
+<div class="container mx-auto px-4 py-8 admin-dash-container">
+    <h2 class="text-3xl font-bold text-center mb-8 text-primary">Admin Dashboard</h2>
+
+    <!-- Welcome Section -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8 admin-dash-welcome">
+        <p class="text-xl text-center">Welcome back, {{ current_user.first_name }}!</p>
+    </section>
+
+    <!-- Key Metrics Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 admin-dash-metrics">
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center metric-users">
+            <h3 class="text-lg font-semibold mb-2">Total Registered Users</h3>
+            <p class="metric-number text-3xl font-bold text-primary">{{ total_users }}</p>
+            <small class="text-gray-600">Includes patients and staff</small>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center metric-staff">
+            <h3 class="text-lg font-semibold mb-2">Active Staff Today</h3>
+            <p class="metric-number text-3xl font-bold text-primary">{{ active_staff }}</p>
+            <small class="text-gray-600">Doctors, nurses, receptionists on duty</small>
+        </div>
+        <div class="stat-card bg-white rounded-lg shadow-md p-6 text-center metric-alerts">
+            <h3 class="text-lg font-semibold mb-2">System Alerts</h3>
+            <p class="metric-number text-3xl font-bold text-primary">{{ system_alerts }}</p>
+            <small class="text-gray-600">Unread critical notifications</small>
+        </div>
+    </section>
+
+    <!-- System Health & Recent Activity -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8 admin-dash-system-health">
+        <details open>
+            <summary class="text-xl font-semibold cursor-pointer">System Health & Recent Activity</summary>
+            <div class="panel-content mt-4">
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>Server Uptime:</strong> {{ uptime_days }} days, {{ uptime_hours }} hours</li>
+                    <li><strong>Database Status:</strong> <span class="text-green-600 font-semibold">{{ db_status }}</span></li>
+                    <li><strong>Recent Logins:</strong> {{ recent_login_count }} in last 24h</li>
+                    <li><strong>Last Backup:</strong> {{ last_backup_time }}</li>
+                    <li><strong>Security Warnings:</strong> {{ security_warnings }}</li>
+                </ul>
+                <p class="mt-4 text-sm text-gray-600"><small>Ensure system stability by regularly checking alerts and logs.</small></p>
+            </div>
+        </details>
+    </section>
+
+    <!-- Pending Tasks & Quick Actions -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8 admin-dash-tasks">
+        <details>
+            <summary class="text-xl font-semibold cursor-pointer">Pending Tasks & Quick Actions</summary>
+            <div class="panel-content mt-4">
+                {% if system_alerts > 0 %}
+                <p class="alert alert-danger bg-red-100 text-red-800 p-4 rounded-md mb-4">
+                    There are {{ system_alerts }} unresolved system alerts!
+                </p>
+                <a href="#" class="btn btn-danger inline-block px-4 py-2 rounded-md">View Alerts & Resolve</a>
+                {% else %}
+                <p class="text-green-600 font-semibold">All system alerts have been addressed.</p>
+                {% endif %}
+            </div>
+        </details>
+    </section>
+
+    <!-- Admin Notes -->
+    <section class="bg-white rounded-lg shadow-md p-6 admin-dash-notes">
+        <h3 class="text-xl font-semibold mb-4">Administrator Notes</h3>
+        <p class="mb-2">Remember to:</p>
+        <ul class="list-disc pl-5 space-y-2">
+            <li>Audit user activity logs weekly to ensure compliance.</li>
+            <li>Verify staff certifications and credentials regularly.</li>
+            <li>Schedule maintenance during off-peak hours to minimize disruptions.</li>
+            <li>Keep software and security patches up-to-date.</li>
+            <li>Review feedback from staff to optimize workflows.</li>
         </ul>
-    </div>
-    <div class="col-md-6">
-        <h3>Active Users</h3>
-        <ul>
-            {% for user in users %}
-                <li>{{ user.first_name }} {{ user.last_name }} ({{ user.role }})</li>
-            {% endfor %}
-        </ul>
-    </div>
+    </section>
 </div>
-<a href="{{ url_for('admin.announcements') }}" class="btn btn-primary">Manage Announcements</a>
-<a href="{{ url_for('admin.system_settings') }}" class="btn btn-secondary">System Settings</a>
 {% endblock %}

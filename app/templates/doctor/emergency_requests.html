@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Emergency Requests - Medi-Assist™{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-red-600 text-center mb-8">Emergency Requests</h1>
+
+    <div class="mb-8 text-center">
+        <button onclick="playAlertSound()" class="btn btn-danger text-2xl px-12 py-6">
+            <i class="fas fa-bell"></i> TEST EMERGENCY ALERT SOUND
+        </button>
+    </div>
+
+    <div id="emergency-list">
+        {% if emergencies %}
+        {% for e in emergencies %}
+        <div class="emergency-card bg-red-100 border-l-8 border-red-600 p-6 mb-6 rounded-r-xl shadow-lg">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-bold">Patient: {{ e.patient_name }}</h3>
+                    <p><strong>Symptoms:</strong> {{ e.symptoms }}</p>
+                    <p><strong>Priority:</strong> <span class="text-red-700 font-bold">{{ e.priority|upper }}</span></p>
+                    <p><strong>Time:</strong> {{ e.requested_at.strftime('%H:%M:%S') }}</p>
+                </div>
+                <div class="text-6xl animate-pulse">ALERT</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center text-2xl text-green-600">No active emergencies</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function playAlertSound() {
+    const audio = new Audio('/static/sound/emergency-alert.mp3');
+    audio.play();
+}
+
+// Auto-refresh every 5 seconds
+setInterval(() => {
+    fetch('/emergency_stream')
+        .then(r => r.text())
+        .then(html => document.getElementById('emergency-list').innerHTML = html);
+}, 5000);
+</script>
+{% endblock %}
