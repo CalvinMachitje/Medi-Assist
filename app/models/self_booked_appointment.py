@@ -1,9 +1,9 @@
 from app.extensions import db
 from datetime import datetime
-from app.models.appointment import Appointment
 
 class SelfBookedAppointment(db.Model):
     __tablename__ = 'self_booked_appointments'
+
     id = db.Column(db.Integer, primary_key=True)
     patient_name = db.Column(db.String(200), nullable=False)
     patient_phone = db.Column(db.String(20))
@@ -13,4 +13,6 @@ class SelfBookedAppointment(db.Model):
     doctor_staff_number = db.Column(db.String(50))
     status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def __repr__(self): return f"<SelfBook {self.patient_name}>"
+
+    def __repr__(self):
+        return f"<SelfBookedAppointment {self.patient_name}>"

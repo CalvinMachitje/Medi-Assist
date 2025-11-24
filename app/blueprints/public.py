@@ -23,27 +23,27 @@ class BookAppointmentForm(FlaskForm):
 # === ROUTES ===
 @bp.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('/defaultPage.html')
 
 @bp.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('/about.html')
 
 @bp.route('/contact')
 def contact():
-    return render_template('contact.html')
+    return render_template('/contact.html')
 
 @bp.route('/services/consultations')
 def consultation_homepage():
-    return render_template('consultations.html')
+    return render_template('/consultations.html')
 
-@bp.route('/services/emergency')
+@bp.route('/emergency')
 def emergency_homepage():
-    return render_template('emergency.html')
+    return render_template('/emergency.html')
 
 @bp.route('/services/vaccinations')
 def vaccinations_homepage():
-    return render_template('vaccinations.html')
+    return render_template('/vaccinations.html')
 
 @bp.route('/book-appointment', methods=['GET', 'POST'])
 def patient_book_appointment():
@@ -83,4 +83,4 @@ def patient_book_appointment():
 def login_page():
     from app.blueprints.auth import LoginForm
     form = LoginForm()
-    return render_template('login.html', form=form)
+    return render_template('/homepage/login_page.html', form=form)

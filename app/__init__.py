@@ -49,13 +49,13 @@ def create_app(config_name='development'):
     cache.init_app(app)
 
     # Register blueprints with proper prefixes
-    app.register_blueprint(auth_bp)                    # /login, /register, etc.
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(recep_bp, url_prefix='/receptionist')
-    app.register_blueprint(doctor_bp, url_prefix='/doctor')
-    app.register_blueprint(nurse_bp, url_prefix='/nurse')
-    app.register_blueprint(public_bp, url_prefix='/public')
-    app.register_blueprint(manager_bp, url_prefix='/manager')
+    app.register_blueprint(auth_bp)  # /login, /register, etc.
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(recep_bp)
+    app.register_blueprint(doctor_bp)
+    app.register_blueprint(nurse_bp)
+    app.register_blueprint(public_bp)
+    app.register_blueprint(manager_bp)
 
     # Custom Jinja2 filters
     @app.template_filter('nl2br')

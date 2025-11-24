@@ -3,7 +3,7 @@ from datetime import datetime
 
 class HelpedPatient(db.Model):
     __tablename__ = 'helped_patients'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=False)
     nurse_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
@@ -12,7 +12,9 @@ class HelpedPatient(db.Model):
     reason = db.Column(db.Text)
     notes = db.Column(db.Text)
 
-    nurse = db.relationship('Employee', backref='helped_patients', lazy=True)
+    # Relationships
+    patient = db.relationship('Patient', backref=db.backref('helped_patients', lazy='select'))
+    nurse = db.relationship('Employee', backref=db.backref('helped_patients', lazy='select'))
 
     def __repr__(self):
-        return f"<Helped {self.id}>"
+        return f"<HelpedPatient {self.id}>"

@@ -6,6 +6,7 @@ from app.models.audit_log import AuditLog
 from app.forms.auth import LoginForm
 from functools import wraps
 from datetime import datetime
+import random, string
 
 bp = Blueprint('auth', __name__, template_folder='../templates/auth')
 
@@ -43,7 +44,7 @@ def login():
                 return redirect(url_for(endpoint))
         flash('Invalid username, password, or account inactive.', 'error')
 
-    return render_template('login.html', form=form)
+    return render_template('login_page.html', form=form)
 
 @bp.route('/logout')
 @login_required
