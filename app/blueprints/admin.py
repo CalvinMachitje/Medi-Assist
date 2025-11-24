@@ -181,7 +181,15 @@ def system_settings():
 
     return render_template('system_settings.html', system_settings=settings.__dict__)
 
+@bp.route('/system')
+@login_required
+def system_guides():
+    return render_template('system_guides.html')
 
+@bp.route('/staff-counseling')
+@login_required
+def staff_counseling():
+    return render_template('staff_counseling.html')
 # Register in __init__.py
 # from app.blueprints.admin import bp as admin_bp
 # app.register_blueprint(admin_bp, url_prefix='/admin')

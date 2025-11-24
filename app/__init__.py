@@ -13,6 +13,7 @@ from .blueprints.receptionist import bp as recep_bp
 from .blueprints.doctor import bp as doctor_bp
 from .blueprints.nurse import bp as nurse_bp
 from .blueprints.manager import bp as manager_bp
+from .blueprints.public import bp as public_bp
 
 # Import models for Flask-Migrate & relationships
 from .models.employee import Employee
@@ -45,6 +46,7 @@ def create_app(config_name='development'):
     app.register_blueprint(recep_bp, url_prefix='/receptionist')
     app.register_blueprint(doctor_bp, url_prefix='/doctor')
     app.register_blueprint(nurse_bp, url_prefix='/nurse')
+    app.register_blueprint(public_bp, url_prefix='/public')
     app.register_blueprint(manager_bp, url_prefix='/manager')
 
     # Custom Jinja2 filters

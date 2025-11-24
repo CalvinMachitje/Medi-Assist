@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Staff Counseling - Medi-Assist™{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-primary mb-4">Staff Wellness & Counseling</h1>
+        <p class="text-xl text-gray-600">Confidential support for all clinic staff</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
+        <div class="card p-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-heart text-red-600 mr-3"></i> Confidential Counseling
+            </h2>
+            <p class="text-lg mb-6">Book a private session with our wellness counselor.</p>
+            <ul class="space-y-4 text-gray-700">
+                <li><i class="fas fa-check text-green-600 mr-2"></i> 100% Confidential</li>
+                <li><i class="fas fa-check text-green-600 mr-2"></i> No impact on performance reviews</li>
+                <li><i class="fas fa-check text-green-600 mr-2"></i> Available to all staff</li>
+            </ul>
+            <a href="mailto:counseling@mediassist.co.za" class="btn btn-primary mt-8 inline-block">
+                <i class="fas fa-envelope mr-2"></i> Book Session
+            </a>
+        </div>
+
+        <div class="card p-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-phone text-blue-600 mr-3"></i> Emergency Support
+            </h2>
+            <div class="space-y-6">
+                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                    <h3 class="font-bold text-red-800">24/7 Crisis Hotline</h3>
+                    <p class="text-2xl font-bold text-red-700 mt-2">0800 567 890</p>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+                    <h3 class="font-bold text-yellow-800">Burnout Prevention</h3>
+                    <p class="mt-2">Take our anonymous wellness check</p>
+                    <a href="/wellness-check" class="btn btn-warning mt-4 inline-block">Start Check</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 text-center">
+        <p class="text-gray-600 text-lg">
+            Your mental health matters. We're here to support you.
+        </p>
+    </div>
+</div>
+{% endblock %}

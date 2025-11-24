@@ -129,3 +129,8 @@ def update_shift():
     # For now: log and return success
     print("Shift Update:", data)
     return jsonify(success=True, message="Shift saved")
+
+@bp.route('/staff-counseling')
+@login_required
+def staff_counseling():
+    return render_template('staff_counseling.html')
