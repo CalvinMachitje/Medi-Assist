@@ -68,89 +68,85 @@
           <span>{{ session.username }} ({{ session.role | capitalize }})</span>
         </div>
 
-        <!-- Role-specific menu -->
+        <!-- RECEPTIONIST MENU -->
         {% if session.role == 'receptionist' %}
           <ul>
-            <li><a href="{{ url_for('reception_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
-            <li><a href="{{ url_for('manage_appointments') }}" class="sidebar-btn">Manage Appointments</a></li>
-            <li><a href="{{ url_for('check_in_desk') }}" class="sidebar-btn">Check-In Desk</a></li>
-            <li><a href="{{ url_for('helped_patients_report') }}" class="sidebar-btn">Patient Report</a></li>
-            <li><a href="{{ url_for('search_patient') }}" class="sidebar-btn">Search Patients</a></li>
-            <li><a href="{{ url_for('reception_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
-            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
-            <li class="theme-toggle-wrapper">
-              <label class="switch ms-3">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-              </label>
-            </li>
+            <li><a href="{{ url_for('reception.reception_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('reception.manage_appointments') }}" class="sidebar-btn">Manage Appointments</a></li>
+            <li><a href="{{ url_for('reception.check_in_desk') }}" class="sidebar-btn">Check-In Desk</a></li>
+            <li><a href="{{ url_for('reception.helped_patients_report') }}" class="sidebar-btn">Patient Report</a></li>
+            <li><a href="{{ url_for('reception.search_patient') }}" class="sidebar-btn">Search Patients</a></li>
+            <li><a href="{{ url_for('reception.view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
           </ul>
+
+        <!-- DOCTOR MENU -->
         {% elif session.role == 'doctor' %}
           <ul>
-            <li><a href="{{ url_for('doctor_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
-            <li><a href="{{ url_for('doctor_report') }}" class="sidebar-btn">Report</a></li>
-            <li><a href="{{ url_for('doctor_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
-            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
-            <li class="theme-toggle-wrapper">
-              <label class="switch ms-3">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-              </label>
-            </li>
+            <li><a href="{{ url_for('doctor.doctor_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('doctor.doctor_report') }}" class="sidebar-btn">My Report</a></li>
+            <li><a href="{{ url_for('doctor.view_announcements') }}" class="sidebar-btn">Announcements</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
           </ul>
+
+        <!-- NURSE MENU -->
         {% elif session.role == 'nurse' %}
           <ul>
-            <li><a href="{{ url_for('nurse_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
-            <li><a href="{{ url_for('nurse_view_announcements') }}" class="sidebar-btn">View Announcements</a></li>
-            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
-            <li class="theme-toggle-wrapper">
-              <label class="switch ms-3">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-              </label>
-            </li>
+            <li><a href="{{ url_for('nurse.nurse_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('nurse.view_announcements') }}" class="sidebar-btn">Announcements</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
           </ul>
+
+        <!-- MANAGER MENU -->
         {% elif session.role == 'manager' %}
           <ul>
-            <li><a href="{{ url_for('manager_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
-            <li><a href="{{ url_for('inventory') }}" class="sidebar-btn">Inventory</a></li>
-            <li><a href="{{ url_for('executive_report') }}" class="sidebar-btn">Executive Report</a></li>
-            <li><a href="{{ url_for('manage_staff') }}" class="sidebar-btn">Manage Staff</a></li>
-            <li><a href="{{ url_for('staff_schedule') }}" class="sidebar-btn">Staff Schedule</a></li>
-            <li><a href="{{ url_for('manager_announcements') }}" class="sidebar-btn">Announcements</a></li>
-            <li><a href="{{ url_for('download_guide') }}" class="sidebar-btn">Download Guide</a></li>
-            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
-            <li class="theme-toggle-wrapper">
-              <label class="switch ms-3">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-              </label>
-            </li>
+            <li><a href="{{ url_for('manager.manager_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('manager.inventory') }}" class="sidebar-btn">Inventory</a></li>
+            <li><a href="{{ url_for('manager.executive_report') }}" class="sidebar-btn">Executive Report</a></li>
+            <li><a href="{{ url_for('manager.manage_staff') }}" class="sidebar-btn">Manage Staff</a></li>
+            <li><a href="{{ url_for('manager.staff_schedule') }}" class="sidebar-btn">Staff Schedule</a></li>
+            <li><a href="{{ url_for('manager.announcements') }}" class="sidebar-btn">Announcements</a></li>
+            <li><a href="{{ url_for('manager.download_guide') }}" class="sidebar-btn">Download Guide</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
           </ul>
+
+        <!-- ADMIN MENU -->
         {% elif session.role == 'admin' %}
           <ul>
-            <li><a href="{{ url_for('admin_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
-            <li><a href="{{ url_for('manage_users') }}" class="sidebar-btn">Manage Users</a></li>
-            <li><a href="{{ url_for('system_settings') }}" class="sidebar-btn">System Settings</a></li>
-            <li><a href="{{ url_for('doctor_report') }}" class="sidebar-btn">Report</a></li>
-            <li><a href="{{ url_for('admin_announcements') }}" class="sidebar-btn">Manage Announcements</a></li>
-            <li><a href="{{ url_for('edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
-            <li class="theme-toggle-wrapper">
-              <label class="switch ms-3">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-              </label>
-            </li>
+            <li><a href="{{ url_for('admin.admin_dashboard') }}" class="sidebar-btn">Dashboard</a></li>
+            <li><a href="{{ url_for('admin.manage_users') }}" class="sidebar-btn">Manage Users</a></li>
+            <li><a href="{{ url_for('admin.system_settings') }}" class="sidebar-btn">System Settings</a></li>
+            <li><a href="{{ url_for('admin.doctor_report') }}" class="sidebar-btn">Doctor Report</a></li>
+            <li><a href="{{ url_for('admin.announcements') }}" class="sidebar-btn">Announcements</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}" class="sidebar-btn">Edit Profile</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="sidebar-btn logout-btn">Logout</a></li>
           </ul>
         {% endif %}
 
+        <!-- Theme Toggle — FULLY ACCESSIBLE -->
+        <div class="theme-toggle-wrapper p-4 border-t border-gray-300 mt-4">
+          <label class="switch" for="darkModeToggle" aria-label="Toggle dark mode">
+            <input 
+              type="checkbox" 
+              id="darkModeToggle" 
+              aria-label="Dark mode toggle"
+              title="Toggle dark mode on/off"
+            >
+            <span class="slider round" aria-hidden="true"></span>
+          </label>
+          <span class="ml-3 text-sm font-medium">Dark Mode</span>
+        </div>
+
       {% else %}
-        <ul><li><a href="{{ url_for('login_page') }}">Login</a></li></ul>
+        <!-- NOT LOGGED IN -->
+        <ul class="text-center mt-8">
+          <li><a href="{{ url_for('public.login_page') }}" class="btn btn-primary">Staff Login</a></li>
+          <li class="mt-4"><a href="{{ url_for('public.home') }}" class="text-blue-600 hover:underline">← Back to Public Site</a></li>
+        </ul>
       {% endif %}
     </nav>
   </aside>

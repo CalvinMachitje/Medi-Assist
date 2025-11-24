@@ -130,9 +130,10 @@
 /* Responsive Table */
 .table-responsive {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
+    /* Smooth scrolling on all modern devices – no vendor prefix needed */
+    scroll-behavior: smooth;
 }
 
 /* -------------------------------------------------------------------------- */

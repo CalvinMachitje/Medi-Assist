@@ -1,7 +1,8 @@
 # app/__init__.py
-from flask import Flask, render_template, flash, Markup
+from flask import Flask, render_template, flash
 from flask_login import LoginManager
 from jinja2 import TemplateNotFound
+from markupsafe import Markup
 import logging
 
 # Local imports
@@ -24,9 +25,16 @@ from .models.announcement import Announcement
 from .models.emergency_request import EmergencyRequest
 from .models.inventory import InventoryItem, InventoryLog
 
+# app/__init__.py
 def create_app(config_name='development'):
     app = Flask(__name__)
-    app.config.from_object(config[config_name])
+    
+    if config_name == 'development':
+        app.config.from_object('app.config.DevelopmentConfig')
+    elif config_name == 'production':
+        app.config.from_object('app.config.ProductionConfig')
+    else:
+        app.config.from_object('app.config.Config')
 
     # Initialize extensions
     db.init_app(app)

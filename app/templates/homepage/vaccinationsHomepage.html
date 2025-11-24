@@ -1,0 +1,11 @@
+{% extends "homepage/base2.html" %}
+
+{% block title %}Medi-Assist™ - Vaccinations{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Vaccination Services</h1>
+    <p>Stay protected with our vaccination programs.</p>
+    <img src="{{ url_for('static', filename='Uploads/vaccine.jpg') }}" alt="Vaccine Image" />
+</div>
+{% endblock %}

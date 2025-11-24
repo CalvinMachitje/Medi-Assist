@@ -1,0 +1,11 @@
+{% extends "homepage/base2.html" %}
+
+{% block title %}Medi-Assist™ - Emergency Care{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Emergency Care</h1>
+    <p>24/7 emergency services available.</p>
+    <img src="{{ url_for('static', filename='Uploads/emergency.jpg') }}" alt="Emergency Image" />
+</div>
+{% endblock %}

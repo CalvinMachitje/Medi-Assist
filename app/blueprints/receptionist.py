@@ -5,7 +5,7 @@ from flask_wtf.csrf import CSRFProtect
 from app.extensions import db
 from app.models.patient import Patient
 from app.models.walkin_queue import WalkinQueue
-from app.models.appointment import Appointment, SelfBookedAppointment
+from app.models.appointment import Appointment
 from app.models.helped_patient import HelpedPatient
 from app.models.announcement import Announcement
 from app.models.employee import Employee
