@@ -6,6 +6,5 @@ __pycache__/
 instance/
 uploads/*
 .DS_Store
-
-
+project_structure.txt
 show_schema.py
