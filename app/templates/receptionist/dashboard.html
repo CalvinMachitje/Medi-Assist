@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Reception Dashboard - Medi-Assist{% endblock %}
+{% block content %}
+<h1>Reception Dashboard</h1>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Today's Appointments</h3>
+        <ul>
+            {% for appt in appointments %}
+                <li>{{ appt.patient.first_name }} {{ appt.patient.last_name }} - {{ appt.appointment_date }} ({{ appt.status }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>Walk-in Queue</h3>
+        <ul>
+            {% for walkin in walkins %}
+                <li>{{ walkin.patient_name }} - Priority: {{ walkin.priority }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<a href="{{ url_for('receptionist.search_patient') }}" class="btn btn-primary">Search Patient</a>
+<a href="{{ url_for('receptionist.add_patient') }}" class="btn btn-secondary">Add Patient</a>
+{% endblock %}
